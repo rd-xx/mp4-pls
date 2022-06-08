@@ -8,6 +8,7 @@
 		"removeComments": true,
 		"strict": true
 	},
+	"files": ["types/global.d.ts"],
 	"include": ["**/*.ts"],
 	"exclude": ["node_modules"]
 }
