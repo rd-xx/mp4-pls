@@ -1,0 +1,20 @@
+{
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"project": "tsconfig.json"
+	},
+	"plugins": ["@typescript-eslint"],
+	"extends": [
+		"plugin:@typescript-eslint/recommended",
+		"plugin:prettier/recommended"
+	],
+	"rules": {
+		"one-var": ["warn", "consecutive"],
+		"curly": ["warn", "multi"],
+		"react-hooks/exhaustive-deps": "off",
+		"@typescript-eslint/no-unsafe-assignment": "off",
+		"@typescript-eslint/no-empty-function": "off",
+		"prettier/prettier": "warn"
+	},
+	"ignorePatterns": ["**/node_modules/**", "*.js"]
+}
