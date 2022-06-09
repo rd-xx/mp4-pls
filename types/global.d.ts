@@ -5,6 +5,7 @@ declare global {
 			root: string;
 			input: string;
 			output: string;
+			ffmpeg: string;
 		};
 }
 
