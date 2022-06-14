@@ -1,6 +1,6 @@
 {
 	"name": "mp4-pls",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "Node.js app that uses ffmpeg to convert all kinds of video formats to mp4 (and mp3).",
 	"main": "dist/index.js",
 	"author": "rdx",
