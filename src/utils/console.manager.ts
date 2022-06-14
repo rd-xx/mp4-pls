@@ -80,6 +80,13 @@ export default class ConsoleManager {
 		this.#loadingAnimation(loaderIndex);
 	}
 
+	printDone() {
+		if (globalThis.canProceed) {
+			console.log(bgGreen('\nDone!'));
+			this.exit();
+		}
+	}
+
 	#loadingAnimation(
 		loaderIndex: number,
 		chars = ['\\', '|', '/', '-'],

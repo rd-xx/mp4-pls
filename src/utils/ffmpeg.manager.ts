@@ -1,22 +1,25 @@
+import { consoleManager } from '../index.js';
+import { ensureDir } from 'fs-extra';
 import ffmpeg from 'fluent-ffmpeg';
-import { parse, sep } from 'path';
+import { parse } from 'path';
 
 export default class FfmpegManager {
-	inputFiles: string[] = [];
-
 	async convertFile(
 		file: string,
 		format: 'mp4' | 'webm' | 'avi' | 'mp3'
 	): Promise<string> {
 		const outputName = file
-			.replace(`${sep}input${sep}`, `${sep}output${sep}`)
+			.replace(`/input/`, `/output/`)
 			.replace(parse(file).ext, '.');
+
+		await ensureDir(parse(outputName).dir);
 
 		return new Promise((resolve, reject) => {
 			ffmpeg(file)
 				.outputOptions(['-crf 18', '-q:a 100'])
 				.output(outputName + format)
 				.on('error', (err) => {
+					consoleManager.printSoftError(err.message);
 					globalThis.canProceed = false;
 					reject(err);
 				})

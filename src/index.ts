@@ -2,8 +2,9 @@ import ConsoleManager from './utils/console.manager.js';
 import FileManager from './utils/file.manager.js';
 import fsExtra, { pathExists } from 'fs-extra';
 import ffmpeg from 'fluent-ffmpeg';
-// import prompts from 'prompts';
+import prompts from 'prompts';
 import { join } from 'path';
+import FfmpegManager from './utils/ffmpeg.manager.js';
 
 const { readJson } = fsExtra, // it throws an error if I don't do this
 	rootPath = process.cwd();
@@ -55,36 +56,34 @@ if (!ffmpegExists)
 else ffmpeg.setFfmpegPath(globalThis.paths.ffmpeg);
 await until(() => globalThis.canProceed === true);
 
-// const response = await prompts({
-// 	name: 'formats',
-// 	type: 'multiselect',
-// 	message: 'Which formats do you want to convert your files to?',
-// 	choices: [
-// 		{ title: 'mp4', value: 'mp4', selected: true },
-// 		{ title: 'mp3', value: 'mp3', selected: true },
-// 		{ title: 'webm', value: 'webm' },
-// 		{ title: 'avi', value: 'avi' }
-// 	]
-// });
+const response = await prompts({
+	name: 'formats',
+	type: 'multiselect',
+	message: 'Which formats do you want to convert your files to?',
+	choices: [
+		{ title: 'mp4', value: 'mp4', selected: true },
+		{ title: 'mp3', value: 'mp3', selected: true },
+		{ title: 'webm', value: 'webm' },
+		{ title: 'avi', value: 'avi' }
+	]
+});
 
 consoleManager.printInputFolder();
 fileManager.getInputFiles();
 
-// for (const file of fileManager.inputFiles)
-// 	for (const format of response.formats) {
-// 		const outputFileName = `${file.split('.')[0]}.${format}`;
-// 		consoleManager.printConverting(file, outputFileName);
-// 		await ffmpeg(join(globalThis.paths.input, file))
-// 			.output(join(globalThis.paths.output, outputFileName))
-// 			.on('error', (err: Error) => {
-// 				consoleManager.printSoftError(err.message);
-// 				globalThis.canProceed = false;
-// 			})
-// 			.on('end', () => {
-// 				consoleManager.printConverted(file, outputFileName);
-// 				fileManager.moveFile(file, outputFileName);
-// 			})
-// 			.run();
-// 	}
+console.log();
+
+const ffmpegManager = new FfmpegManager();
+
+for (const file of fileManager.inputFiles)
+	for (const format of response.formats) {
+		const loaderIndex = consoleManager.printConverting(file);
+
+		await ffmpegManager.convertFile(file, format);
+		consoleManager.printConverted(file, loaderIndex);
+		console.log();
+	}
+
+consoleManager.printDone();
 
 export { fileManager, consoleManager };
