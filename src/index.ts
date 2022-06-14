@@ -17,7 +17,7 @@ globalThis.version = (await readJson(join(rootPath, 'package.json'))).version;
 
 const ffmpegExists = await pathExists(globalThis.paths.ffmpeg);
 if (!ffmpegExists)
-	throw new Error('You have to ffmpeg first in order to use this.');
+	throw new Error('You have to download ffmpeg first in order to use this.');
 else ffmpeg.setFfmpegPath(globalThis.paths.ffmpeg);
 
 async function until(conditionFunction: () => boolean): Promise<void> {
