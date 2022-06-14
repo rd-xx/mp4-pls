@@ -38,7 +38,8 @@ export default class ConsoleManager {
 	}
 
 	printInputFolder() {
-		tree(globalThis.paths.input);
+		const fileTree = tree(globalThis.paths.input);
+		console.log(fileTree);
 	}
 
 	stopPrinting() {
