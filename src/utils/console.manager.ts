@@ -1,5 +1,7 @@
-import chalk from 'chalk';
+import kleur from 'kleur';
 import tree from 'tree-node-cli';
+
+const { gray, cyan, yellow } = kleur; // it throws an error if I don't do this
 
 export default class ConsoleManager {
 	#canPrint: boolean;
@@ -14,22 +16,22 @@ export default class ConsoleManager {
 
 	welcome() {
 		console.clear();
-		console.log(chalk.gray(`mp4-pls » ${globalThis.version}\n`));
+		console.log(gray(`mp4-pls » ${globalThis.version}\n`));
 
 		if (this.#firstTime) {
 			console.log(
 				"Seems like it's the first time you use " +
-					chalk.cyan('mp4-pls') +
+					cyan('mp4-pls') +
 					'. Two folders have been created, ' +
-					chalk.yellow('input') +
+					yellow('input') +
 					' and ' +
-					chalk.yellow('output') +
+					yellow('output') +
 					'.'
 			);
 
 			console.log(
 				'Just put the videos you want to convert in the ' +
-					chalk.yellow('input') +
+					yellow('input') +
 					' folder and let me do the rest.'
 			);
 
@@ -38,8 +40,10 @@ export default class ConsoleManager {
 	}
 
 	printInputFolder() {
-		const fileTree = tree(globalThis.paths.input);
-		console.log(fileTree);
+		if (this.#canPrint) {
+			const fileTree = tree(globalThis.paths.input);
+			console.log(fileTree);
+		}
 	}
 
 	stopPrinting() {
