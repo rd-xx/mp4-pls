@@ -1,21 +1,25 @@
-import { fileManager } from '../index';
 import ffmpeg from 'fluent-ffmpeg';
-import { sep } from 'path';
+import { parse, sep } from 'path';
 
 export default class FfmpegManager {
-	inputFiles: typeof fileManager['inputFiles'] = [];
+	inputFiles: string[] = [];
 
-	async convertFile(file: typeof this['inputFiles'][0]): Promise<string> {
-		const outputName = file.path
+	async convertFile(
+		file: string,
+		format: 'mp4' | 'webm' | 'avi' | 'mp3'
+	): Promise<string> {
+		const outputName = file
 			.replace(`${sep}input${sep}`, `${sep}output${sep}`)
-			.replace(file.extension as string, '.');
+			.replace(parse(file).ext, '.');
 
 		return new Promise((resolve, reject) => {
-			ffmpeg(file.path)
+			ffmpeg(file)
 				.outputOptions(['-crf 18', '-q:a 100'])
-				.output(outputName + 'mp4')
-				.output(outputName + 'mp3')
-				.on('error', (err) => reject(err))
+				.output(outputName + format)
+				.on('error', (err) => {
+					globalThis.canProceed = false;
+					reject(err);
+				})
 				.on('end', () => resolve(outputName))
 				.run();
 		});
